@@ -16,7 +16,12 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from posts.views import home_page_view, create_note_view, show_note_view, show_about_us_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path("", home_page_view, name="home"),
+    path("create", create_note_view, name="create-note"),
+    path("post/<note_uuid>", show_note_view, name="show-note"),
+    path("about", show_about_us_view, name="about_us"),
 ]
