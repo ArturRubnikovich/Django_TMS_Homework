@@ -37,3 +37,13 @@ def show_note_view(request: WSGIRequest, note_uuid):
 
 def show_about_us_view(request: WSGIRequest):
     return render(request, "about_us.html")
+
+
+def edit_note_view(request: WSGIRequest, note_uuid):
+    try:
+        note = Note.objects.get(uuid=note_uuid)
+
+    except Note.DoesNotExist:
+        raise Http404
+
+    return render(request, "edit_form.html", {"note": note})
