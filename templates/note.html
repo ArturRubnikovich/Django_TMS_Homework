@@ -15,7 +15,7 @@
 
             <a href="{% url 'edit-note' note.uuid %}" class="btn btn-warning">Редактировать</a>
 
-            <form action="{# URL для удаления #}" method="post">
+            <form action="{% url 'delete-note' note.uuid %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger">Удалить</button>
             </form>

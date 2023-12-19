@@ -49,5 +49,17 @@ def edit_note_view(request: WSGIRequest, note_uuid):
     if request.method == "POST":
         note.title = request.POST["title"]
         note.content = request.POST["content"]
+        note.save()
+        return HttpResponseRedirect(reverse('show-note', args=[note.uuid]))
 
     return render(request, "edit_form.html", {"note": note})
+
+
+def delete_note_view(request: WSGIRequest, note_uuid):
+    try:
+        note = Note.objects.get(uuid=note_uuid)
+        note.delete()
+
+    except Note.DoesNotExist:
+        raise Http404
+    return HttpResponseRedirect(reverse('home'))

@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from posts.views import home_page_view, create_note_view, show_note_view, show_about_us_view, \
-    edit_note_view
+    edit_note_view, delete_note_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +26,5 @@ urlpatterns = [
     path("post/<note_uuid>", show_note_view, name="show-note"),
     path("about", show_about_us_view, name="about_us"),
     path("edit/<note_uuid>", edit_note_view, name="edit-note"),
+    path("delete/<note_uuid>", delete_note_view, name="delete-note"),
 ]
