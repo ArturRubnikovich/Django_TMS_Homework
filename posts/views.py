@@ -46,4 +46,8 @@ def edit_note_view(request: WSGIRequest, note_uuid):
     except Note.DoesNotExist:
         raise Http404
 
+    if request.method == "POST":
+        note.title = request.POST["title"]
+        note.content = request.POST["content"]
+
     return render(request, "edit_form.html", {"note": note})

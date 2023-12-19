@@ -13,7 +13,7 @@
 
         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
 
-            <a href="#{# URL для обновления записи #}" class="btn btn-warning">Редактировать</a>
+            <a href="{% url 'edit-note' note.uuid %}" class="btn btn-warning">Редактировать</a>
 
             <form action="{# URL для удаления #}" method="post">
                 {% csrf_token %}
