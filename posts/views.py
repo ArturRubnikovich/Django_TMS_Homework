@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.urls import reverse
+from django.utils import timezone
 from django.http import HttpResponseRedirect, Http404
 from django.core.handlers.wsgi import WSGIRequest
 
@@ -49,6 +50,7 @@ def edit_note_view(request: WSGIRequest, note_uuid):
     if request.method == "POST":
         note.title = request.POST["title"]
         note.content = request.POST["content"]
+        note.mod_time = timezone.now()
         note.save()
         return HttpResponseRedirect(reverse('show-note', args=[note.uuid]))
 

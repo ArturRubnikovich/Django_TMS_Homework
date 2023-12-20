@@ -8,3 +8,4 @@ class Note(models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
+    mod_time = models.DateTimeField(null=True, blank=True)
