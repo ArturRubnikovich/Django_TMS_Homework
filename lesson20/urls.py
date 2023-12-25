@@ -14,17 +14,22 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import serve
+from django.conf import settings
 from django.contrib import admin
-from django.urls import path
-from posts.views import home_page_view, create_note_view, show_note_view, show_about_us_view, \
-    edit_note_view, delete_note_view
+from django.urls import path, include, re_path
+from posts import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", home_page_view, name="home"),
-    path("create", create_note_view, name="create-note"),
-    path("post/<note_uuid>", show_note_view, name="show-note"),
-    path("about", show_about_us_view, name="about_us"),
-    path("edit/<note_uuid>", edit_note_view, name="edit-note"),
-    path("delete/<note_uuid>", delete_note_view, name="delete-note"),
+    path('accounts/', include("django.contrib.auth.urls")),
+    path('accounts/register', views.register, name="register"),
+    path("", views.home_page_view, name="home"),
+    path("filter", views.filter_notes_view, name="filter-notes"),
+    path("create", views.create_note_view, name="create-note"),
+    path("post/<note_uuid>", views.show_note_view, name="show-note"),
+    path("about", views.show_about_us_view, name="about_us"),
+    path("edit/<note_uuid>", views.edit_note_view, name="edit-note"),
+    path("post/<note_uuid>/delete", views.delete_note_view, name="delete-note"),
+    re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT})
 ]
