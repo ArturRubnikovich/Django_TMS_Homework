@@ -111,6 +111,7 @@ def edit_note_view(request: WSGIRequest, note_uuid):
         note.title = request.POST["title"]
         note.content = request.POST["content"]
         note.mod_time = timezone.now()
+        note.image = request.FILES.get("noteImage")
         note.save()
         return HttpResponseRedirect(reverse('show-note', args=[note.uuid]))
 
@@ -121,6 +122,14 @@ def delete_note_view(request: WSGIRequest, note_uuid):
     if request.method == "POST":
         Note.objects.filter(uuid=note_uuid).delete()
     return HttpResponseRedirect(reverse("home"))
+
+
+def user_posts(request: WSGIRequest, username):
+    notes = Note.objects.filter(user__username=username)
+    context: dict = {
+        "notes": notes
+    }
+    return render(request, "home.html", context)
 
 
 def register(request: WSGIRequest):
