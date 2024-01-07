@@ -111,7 +111,10 @@ def edit_note_view(request: WSGIRequest, note_uuid):
         note.title = request.POST["title"]
         note.content = request.POST["content"]
         note.mod_time = timezone.now()
-        note.image = request.FILES.get("noteImage")
+        if note.image:
+            note.image.delete()
+            note.image = request.FILES["noteImage"]
+            note.save()
         note.save()
         return HttpResponseRedirect(reverse('show-note', args=[note.uuid]))
 
