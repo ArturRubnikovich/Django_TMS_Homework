@@ -12,6 +12,7 @@
             <p class="blog-post-meta">Дата и время последнего изменения: {{ note.mod_time }}</p>
         </div>
 
+    {% if user and  user == note.user %}
         <div class="btn-group" role="group" aria-label="Basic mixed styles example">
 
             <a href="{% url 'edit-note' note.uuid %}" class="btn btn-warning">Редактировать</a>
@@ -21,6 +22,7 @@
                 <button type="submit" class="btn btn-danger">Удалить</button>
             </form>
         </div>
+    {% endif %}
 
         <hr>
 
