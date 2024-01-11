@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.db.models import Q
 from django.utils import timezone
-from django.http import HttpResponseRedirect, Http404, HttpRequest
+from django.http import HttpResponseRedirect, Http404, HttpRequest, HttpResponseForbidden
 from django.core.handlers.wsgi import WSGIRequest
 
 from .models import Note, User
@@ -107,6 +107,9 @@ def edit_note_view(request: WSGIRequest, note_uuid):
     except Note.DoesNotExist:
         raise Http404
 
+    if note.user != request.user:
+        return HttpResponseForbidden("Запрещено!")
+
     if request.method == "POST":
         note.title = request.POST["title"]
         note.content = request.POST["content"]
@@ -122,6 +125,9 @@ def edit_note_view(request: WSGIRequest, note_uuid):
 
 
 def delete_note_view(request: WSGIRequest, note_uuid):
+    note = Note.objects.get(uuid=note_uuid)
+    if note.user != request.user:
+        return HttpResponseForbidden("Запрещено!")
     if request.method == "POST":
         Note.objects.filter(uuid=note_uuid).delete()
     return HttpResponseRedirect(reverse("home"))
