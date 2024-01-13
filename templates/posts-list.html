@@ -14,9 +14,17 @@
                 </svg>
                 {{ note.created_at }}
             </p>
-              <a href="{% url 'user-posts' note.user %}">
+              <a href="{% url 'user-posts' note.username %}">
                 {{ note.username }}
             </a>
+              <div>
+                {# Если у заметки нет тегов, то все равно будет список, в котором имеется лишь один None, не учитываем такое #}
+                {% if note.tag_names.0 != None %}
+                  {% for tag in note.tag_names %}
+                      <span class="me-2 badge text-bg-primary">{{ tag }}</span>
+                  {% endfor %}
+                {% endif %}
+              </div>
           </div>
         </div>
       </div>

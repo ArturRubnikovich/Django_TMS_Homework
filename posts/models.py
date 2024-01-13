@@ -6,6 +6,7 @@ from django.dispatch import receiver
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
 from django.db import models
+from ckeditor_uploader.fields import RichTextUploadingField
 
 
 class User(AbstractUser):
@@ -19,20 +20,31 @@ class User(AbstractUser):
         db_table = "users"
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
+
 def upload_to(instance: "Note", filename: str) -> str:
     """Путь для файла относительно корня медиахранилища."""
     return f"{instance.uuid}/{filename}"
 
 
 class Note(models.Model):
-    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    title = models.CharField(max_length=255)
-    content = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
-    mod_time = models.DateTimeField(null=True, blank=True)
-    image = models.ImageField(upload_to=upload_to, null=True)
+    # Стандартный ID для каждой таблицы можно не указывать, Django по умолчанию это добавит.
 
-    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    uuid = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=255, verbose_name="Заголовок", help_text="Укажите не более 255 символов")
+    content = RichTextUploadingField(verbose_name="Содержимое")
+    created_at = models.DateTimeField(auto_now_add=True)
+    image = models.ImageField(upload_to=upload_to, null=True, blank=True, verbose_name="Превью")
+    # auto_now_add=True автоматически добавляет текущую дату и время.
+
+    tags = models.ManyToManyField(Tag, related_name="notes", verbose_name="Теги")
+
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, verbose_name="Владелец")
     # `on_delete=models.CASCADE`
     # При удалении пользователя, удалятся все его записи.
 
@@ -43,6 +55,12 @@ class Note(models.Model):
     class Meta:
         # db_table = 'notes'  # Название таблицы в базе.
         ordering = ['-created_at']  # Дефис это означает DESC сортировку (обратную).
+        indexes = [
+            models.Index(fields=("created_at",), name="created_at_index"),
+        ]
+
+    def __str__(self):
+        return f"Заметка: \"{self.title}\""
 
 
 @receiver(post_delete, sender=Note)
