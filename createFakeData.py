@@ -2,6 +2,7 @@
 import os
 
 from django import setup
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'lesson20.settings')
 setup()  # Инициализируем Django.
 
@@ -53,4 +54,4 @@ def create_notes(limit: int):
 if __name__ == "__main__":
     # Выполняется только при непосредственном запуске этого файла.
     # create_users(100)
-    create_notes(500)
+    create_notes(100)

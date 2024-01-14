@@ -67,7 +67,7 @@ class Note(models.Model):
 def after_delete_note(sender, instance: Note, **kwargs):
     if instance.image:
         note_media_folder: pathlib.Path = (settings.MEDIA_ROOT / str(instance.uuid))
-
-        for file in note_media_folder.glob("*"):
-            file.unlink(missing_ok=True)
-        note_media_folder.unlink(missing_ok=True)
+        if note_media_folder.exists():
+            for file in note_media_folder.glob("*"):
+                file.unlink(missing_ok=True)
+            note_media_folder.rmdir()
