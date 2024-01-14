@@ -66,6 +66,8 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class CustomUserAdmin(UserAdmin):
+    list_display = ["username", "first_name", "last_name", "notes_number", "is_active"]
+    actions = ["deactivate", "activate"]
     fieldsets = (
         # 1  tuple(None, dict)
         (None, {"fields": ("username", "password")}),
@@ -90,3 +92,15 @@ class CustomUserAdmin(UserAdmin):
         # 4  tuple(str, dict)
         ("Важные даты", {"fields": ("last_login", "date_joined")}),
     )
+
+    @admin.display(description="Количество заметок")
+    def notes_number(self, obj: User):
+        return obj.note_set.count()
+
+    @admin.action(description="Деактивировать учетную запись")
+    def deactivate(self, form, queryset: QuerySet[User]):
+        queryset.update(is_active=False)
+
+    @admin.action(description="Активировать учетную запись")
+    def activate(self, form, queryset: QuerySet[User]):
+        queryset.update(is_active=True)
