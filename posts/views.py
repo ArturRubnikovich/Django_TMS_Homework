@@ -18,7 +18,7 @@ def home_page_view(request: HttpRequest):
     # return render(request, "home.html", context)
     queryset = queryset_optimization(Note.objects.all())
 
-    print(queryset.query)
+    # print(queryset.query)
 
     return render(request, "home.html", {"notes": queryset[:100]})
 
