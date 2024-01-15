@@ -32,6 +32,7 @@ urlpatterns = [
     path("edit/<note_uuid>", views.edit_note_view, name="edit-note"),
     path("post/<note_uuid>/delete", views.delete_note_view, name="delete-note"),
     path("user/<username>/posts", views.user_posts, name="user-posts"),
+    path("profile/<username>", views.user_profile, name="user-profile"),
     re_path(r"^media/(?P<path>.*)$", serve, {"document_root": settings.MEDIA_ROOT}),
     path("__debug__/", include("debug_toolbar.urls")),
     path('ckeditor/', include('ckeditor_uploader.urls')),

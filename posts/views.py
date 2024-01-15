@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.http import HttpResponseRedirect, Http404, HttpRequest, HttpResponseForbidden
 from django.core.handlers.wsgi import WSGIRequest
 
-from .models import Note, User
+from .models import Note, User, Tag
 from .service import create_note, filter_notes, queryset_optimization
 
 
@@ -162,6 +162,21 @@ def user_posts(request: WSGIRequest, username):
     print(Note.objects.filter(user__username=username).query)
 
     return render(request, "posts-list.html", {"notes": queryset})
+
+
+def user_profile(request: WSGIRequest, username):
+    if request.method == "POST":
+        user = User.objects.get(username=username)
+        user.first_name = request.POST.get("first_name", user.first_name)
+        user.last_name = request.POST.get("last_name", user.last_name)
+        user.phone = request.POST.get("phone", user.phone)
+        user.save()
+        return HttpResponseRedirect(reverse("home"))
+    user = User.objects.get(username=username)
+    all_tags = Tag.objects.filter(notes__user=user).distinct()
+
+    return render(request, "profile.html", {"tags": all_tags})
+
 
 
 def register(request: WSGIRequest):

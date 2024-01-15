@@ -50,6 +50,10 @@
       {% endif %}
 
       <li class="nav-item">
+          <a class="nav-link" aria-current="page" href="{% url 'user-profile' user.username %}">Мой профиль</a>
+      </li>
+
+      <li class="nav-item">
           <a class="nav-link" href="{% url 'about_us' %}">О сайте</a>
         </li>
 
