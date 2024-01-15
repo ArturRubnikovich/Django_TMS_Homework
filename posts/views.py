@@ -77,7 +77,7 @@ def filter_notes_view(request: WSGIRequest):
 
 @login_required
 def create_note_view(request: WSGIRequest):
-    print(request.user)  # В каждом запросе есть пользователь!
+    # print(request.user)  # В каждом запросе есть пользователь!
     # НО, только если он вошел на сайте, в ином случае это аноним.
 
     if not request.user.is_authenticated:
@@ -159,7 +159,7 @@ def user_posts(request: WSGIRequest, username):
     # WHERE "users"."username" = boris1992
     # ORDER BY "posts_note"."created_at" DESC
 
-    print(Note.objects.filter(user__username=username).query)
+    # print(Note.objects.filter(user__username=username).query)
 
     return render(request, "posts-list.html", {"notes": queryset})
 
@@ -182,16 +182,16 @@ def user_profile(request: WSGIRequest, username):
 def register(request: WSGIRequest):
     if request.method != "POST":
         return render(request, "registration/register.html")
-    print(request.POST)
+    # print(request.POST)
     if not request.POST.get("username") or not request.POST.get("email") or not request.POST.get("password1"):
         return render(
             request,
             "registration/register.html",
             {"errors": "Укажите все поля!"}
         )
-    print(User.objects.filter(
-        Q(username=request.POST["username"]) | Q(email=request.POST["email"])
-    ))
+    # print(User.objects.filter(
+    #     Q(username=request.POST["username"]) | Q(email=request.POST["email"])
+    # ))
     # Если уже есть такой пользователь с username или email.
     if User.objects.filter(
             Q(username=request.POST["username"]) | Q(email=request.POST["email"])
