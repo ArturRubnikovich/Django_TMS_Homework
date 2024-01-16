@@ -172,8 +172,7 @@ def user_profile(request: WSGIRequest, username):
         user.phone = request.POST.get("phone", user.phone)
         user.save()
         return HttpResponseRedirect(reverse("home"))
-    user = User.objects.get(username=username)
-    all_tags = Tag.objects.filter(notes__user=user).distinct()
+    all_tags = Tag.objects.filter(notes__user__username=username).distinct()
 
     return render(request, "profile.html", {"tags": all_tags})
 
