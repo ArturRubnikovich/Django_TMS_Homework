@@ -75,6 +75,7 @@ def filter_notes_view(request: WSGIRequest):
     }
     return render(request, "home.html", context)
 
+
 @login_required
 def create_note_view(request: WSGIRequest):
     # print(request.user)  # В каждом запросе есть пользователь!
@@ -175,7 +176,6 @@ def user_profile(request: WSGIRequest, username):
     all_tags = Tag.objects.filter(notes__user__username=username).distinct()
 
     return render(request, "profile.html", {"tags": all_tags})
-
 
 
 def register(request: WSGIRequest):

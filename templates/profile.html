@@ -27,7 +27,7 @@
     </div>
     <hr>
 
-    <form action="{% url 'user-profile' user.username %}" method="post" enctype="multipart/form-data">
+    <form action="{% url 'user-profile' user.username %}" method="post">
         {% csrf_token %}
 
 

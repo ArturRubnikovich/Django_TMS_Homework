@@ -36,10 +36,13 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'django.contrib.postgres',
     'django.contrib.staticfiles',
+    'django_filters',
     'posts.apps.PostsConfig',
     'debug_toolbar',
     'ckeditor',
+    'rest_framework',
 ]
 
 AUTH_USER_MODEL = "posts.User"
@@ -90,6 +93,13 @@ DATABASES = {
         'HOST': '127.0.0.1',  # IP адрес или домен СУБД.
         'PORT': 5432,
     }
+}
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+    "PAGE_SIZE": 2,
 }
 
 # Password validation
@@ -148,18 +158,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # =================== CKEDITOR =======================
 CKEDITOR_BASEPATH = f"/{STATIC_URL}ckeditor/ckeditor/"
-
-
-def get_filename(file_name: str, request):
-    return str(uuid.uuid4()) + file_name
-
-CKEDITOR_FILENAME_GENERATOR = 'project.settings.get_filename'
-CKEDITOR_UPLOAD_SLUGIFY_FILENAME = True
-CKEDITOR_RESTRICT_BY_USER = True
-CKEDITOR_BROWSE_SHOW_DIRS = True
-CKEDITOR_RESTRICT_BY_DATE = False
-
-
 CKEDITOR_UPLOAD_PATH = "uploads/"
 
 CKEDITOR_CONFIGS = {
