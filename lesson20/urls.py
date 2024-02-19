@@ -19,11 +19,20 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include, re_path
 from posts import views
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+    TokenVerifyView,
+)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include("django.contrib.auth.urls")),
     path('accounts/register', views.register, name="register"),
+    path("register/confirm/<uidb64>/<token>", views.confirm_register_view, name="register-confirm"),
+    path("register/", views.register_view, name="register"),
+    path("reset/confirm/<uidb64>/<token>", views.confirm_reset_view, name="reset-confirm"),
+    path("reset/", views.reset_view, name="reset"),
     path("", views.home_page_view, name="home"),
     path("filter", views.filter_notes_view, name="filter-notes"),
     path("create", views.create_note_view, name="create-note"),
@@ -37,4 +46,13 @@ urlpatterns = [
     path("__debug__/", include("debug_toolbar.urls")),
     path('ckeditor/', include('ckeditor_uploader.urls')),
     path("api/", include("posts.api.urls")),
+    # Token
+    path("api/auth/", include("djoser.urls.authtoken")),
+    path("api/auth/", include("djoser.urls.jwt")),
+    path("api/auth/", include("djoser.urls.base")),
+    # JWT
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
+    path('history', views.ListHistoryOfPages.as_view(), name='show-history-of-pages'),
 ]
