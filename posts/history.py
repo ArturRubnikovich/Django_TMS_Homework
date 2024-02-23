@@ -14,12 +14,14 @@ class HistoryPageNotes:
 
     def add_page(self, note: Note) -> None:
 
-        if len(self._session["history"]) >= 20:
-            self._session["history"].pop(0)
-        elif str(note.uuid) in self._session["history"]:
+        self._session["history"] = self._session["history"][-20:]
+
+        if str(note.uuid) in self._session["history"]:
             self._session["history"].remove(str(note.uuid))
 
-        self._session["history"].append(str(note.uuid))
+        elif self._session["history"].append(str(note.uuid)):
+            self._session["history"] = self._session["history"][-20:]
+
         self._session.save()
 
     @property
