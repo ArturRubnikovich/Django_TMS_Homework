@@ -13,15 +13,12 @@ class HistoryPageNotes:
             self._session["history"] = []
 
     def add_page(self, note: Note) -> None:
+        note_uuid = str(note.uuid)
+        if note_uuid in self._session["history"]:
+            self._session["history"].remove(note_uuid)
 
+        self._session["history"].append(note_uuid)
         self._session["history"] = self._session["history"][-20:]
-
-        if str(note.uuid) in self._session["history"]:
-            self._session["history"].remove(str(note.uuid))
-
-        elif self._session["history"].append(str(note.uuid)):
-            self._session["history"] = self._session["history"][-20:]
-
         self._session.save()
 
     @property
